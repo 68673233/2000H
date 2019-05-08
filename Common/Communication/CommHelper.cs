@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,15 +26,34 @@ namespace Common.Communication
                 }
         }
 
+        private Action<byte[]> onRelayDate = null;
+        public Action<byte[]> OnRelayDate {
+            set {
+                onRelayDate = value;
+                if (comm != null) comm.OnRelayDate = onRelayDate;
+            }
+        }
+
+        RegisteredWaitHandle registeredWaitHandle;
+
         private CommProtocol comm;
         public CommHelper() {
             comm = new CommProtocol();
             comm.OnPortCheckSuccess = onPortCheckSuccess;
+            
         }
 
         public void checkUsbState() {
-            ThreadPool.RegisterWaitForSingleObject(new AutoResetEvent(true), new WaitOrTimerCallback(checkUsbStateMethod), null, 3000, false);
+            registeredWaitHandle= ThreadPool.RegisterWaitForSingleObject(new AutoResetEvent(true), new WaitOrTimerCallback(checkUsbStateMethod), null, 3000, false);
         }
+        public void unCheckUsbState() {
+            registeredWaitHandle.Unregister(new AutoResetEvent(true));
+        }
+
+        public void sendMessage(byte[] bytes) {
+            comm?.sendMessage(bytes);
+        }
+
         private void checkUsbStateMethod(object state, bool timedout)
         {
             string[] ss = CommProtocol.getSerialNames();
@@ -42,6 +62,7 @@ namespace Common.Communication
                 {
                     //相当于插入USB
                     comm.PortNames = ss;
+                    Debug.WriteLine("插入USB");
                 }
                 else
                 {
@@ -51,6 +72,7 @@ namespace Common.Communication
                         OnPortCheckError?.Invoke();
                         comm.PortNames = ss;
                     }
+                    Debug.WriteLine("拔出USB");
                 }
             }
         }

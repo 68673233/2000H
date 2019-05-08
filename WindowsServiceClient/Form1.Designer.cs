@@ -43,11 +43,13 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_SetAndRun = new System.Windows.Forms.Button();
             this.txt_port = new System.Windows.Forms.TextBox();
+            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuitem_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -117,20 +119,22 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuitem_showUI,
-            this.menuitem_hideUI});
+            this.menuitem_hideUI,
+            this.toolStripMenuItem1,
+            this.menuitem_exit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 98);
             // 
             // menuitem_showUI
             // 
             this.menuitem_showUI.Name = "menuitem_showUI";
-            this.menuitem_showUI.Size = new System.Drawing.Size(124, 22);
+            this.menuitem_showUI.Size = new System.Drawing.Size(152, 22);
             this.menuitem_showUI.Text = "显示界面";
             // 
             // menuitem_hideUI
             // 
             this.menuitem_hideUI.Name = "menuitem_hideUI";
-            this.menuitem_hideUI.Size = new System.Drawing.Size(124, 22);
+            this.menuitem_hideUI.Size = new System.Drawing.Size(152, 22);
             this.menuitem_hideUI.Text = "隐藏界面";
             // 
             // groupBox1
@@ -165,6 +169,16 @@
             this.txt_port.Size = new System.Drawing.Size(100, 21);
             this.txt_port.TabIndex = 2;
             this.txt_port.Text = "10080";
+            // 
+            // ipAddrText1
+            // 
+            this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipAddrText1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ipAddrText1.Location = new System.Drawing.Point(75, 27);
+            this.ipAddrText1.Margin = new System.Windows.Forms.Padding(5);
+            this.ipAddrText1.Name = "ipAddrText1";
+            this.ipAddrText1.Size = new System.Drawing.Size(170, 27);
+            this.ipAddrText1.TabIndex = 1;
             // 
             // label4
             // 
@@ -203,15 +217,16 @@
             this.listBox1.Size = new System.Drawing.Size(524, 206);
             this.listBox1.TabIndex = 0;
             // 
-            // ipAddrText1
+            // toolStripMenuItem1
             // 
-            this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipAddrText1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ipAddrText1.Location = new System.Drawing.Point(75, 27);
-            this.ipAddrText1.Margin = new System.Windows.Forms.Padding(5);
-            this.ipAddrText1.Name = "ipAddrText1";
-            this.ipAddrText1.Size = new System.Drawing.Size(170, 27);
-            this.ipAddrText1.TabIndex = 1;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // menuitem_exit
+            // 
+            this.menuitem_exit.Name = "menuitem_exit";
+            this.menuitem_exit.Size = new System.Drawing.Size(152, 22);
+            this.menuitem_exit.Text = "退出";
             // 
             // Form1
             // 
@@ -261,6 +276,8 @@
         private System.Windows.Forms.Button btn_SetAndRun;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem menuitem_exit;
     }
 }
 

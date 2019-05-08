@@ -8,8 +8,9 @@ namespace Common.Communication
     public class TcpHelper
     {
         private TCPSocket recieveSocket;
-
         private TcpProtocol tcpProtocol;
+
+        public OnUncompressData onUncompressData = null;
 
         private string _ip;
         private int _port;
@@ -30,13 +31,13 @@ namespace Common.Communication
             
             if (recieveSocket == null)
             {
-                recieveSocket = new TCPSocket(_ip, _port, tcpProtocol.deal, this.RecieveTimeOut);
+                recieveSocket = new TCPSocket(_ip, _port, onUncompressData, this.RecieveTimeOut);
                 recieveSocket.AddRecieveTimeout(this.RecieveTimeOut);
                 recieveSocket.startAcceptMsg();
             }
             else if (recieveSocket.IsConn == -1)
             {
-                recieveSocket = new TCPSocket(_ip, _port, tcpProtocol.deal, this.RecieveTimeOut);
+                recieveSocket = new TCPSocket(_ip, _port, onUncompressData, this.RecieveTimeOut);
                 recieveSocket.AddRecieveTimeout(this.RecieveTimeOut);
                 recieveSocket.startAcceptMsg();
             }

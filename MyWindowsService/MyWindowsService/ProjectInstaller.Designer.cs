@@ -39,8 +39,9 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "我的服务";
+            this.serviceInstaller1.Description = "ME2000H";
             this.serviceInstaller1.ServiceName = "MyService";
+            this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 

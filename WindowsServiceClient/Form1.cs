@@ -51,6 +51,7 @@ namespace WindowsServiceClient
 
             menuitem_showUI.Click += new EventHandler(menuItem_Click);
             menuitem_hideUI.Click += new EventHandler(menuItem_Click);
+            menuitem_exit.Click += new EventHandler(menuItem_Click);
 
             this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
         }
@@ -155,12 +156,20 @@ namespace WindowsServiceClient
                         this.Hide();
                         notifyIcon1.Visible = true;
                     } break;
+                case "menuitem_exit":
+                    {
+                        Application.Exit();
+                    } break;
             }
             Logger.Instance.i("menuItem",menuitem.Name+"_Click");
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (this.Visible == false) {
+                e.Cancel = false;
+                return;
+            }
             e.Cancel = true;
             this.Hide();
             notifyIcon1.Visible = true;

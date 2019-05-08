@@ -32,8 +32,14 @@ namespace Common.Save
             if (FilePath != null) {
                 fileName = DateTime.Now.ToString("yyyy-MM-dd");
                 string path = FilePath + "\\"+fileName;
-                File.AppendAllText(path,  content);
-                File.AppendAllText(path, Environment.NewLine);
+                try
+                {
+                    File.AppendAllText(path, content + Environment.NewLine);
+                    //File.AppendAllText(path, Environment.NewLine);
+                }
+                catch (Exception e) {
+
+                }
                 OnLoggerI?.Invoke(content);
             }
         }

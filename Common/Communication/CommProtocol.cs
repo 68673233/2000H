@@ -19,6 +19,10 @@ namespace Common.Communication
         public Action OnPortCheckSuccess {
             set { onPortCheckSuccess = value; }
         }
+        public Action<byte[]> onRelayDate = null;
+        public Action<byte[]> OnRelayDate {
+            set { onRelayDate = value; }
+        }
         
         //当前是否是探测串口状态
         private bool isCheckCommState = false;
@@ -77,10 +81,10 @@ namespace Common.Communication
             string[] portNames = getSerialNames(); 
             for (int i = 0; i < portNames.Length; i++)
             {
-                if (portNames[i] == comm.Port) { flag = false; return flag; }
+                if (comm!=null && portNames[i] == comm.Port) { flag = false; return flag; }
             }
             NoHeartBeatCount = HeartBeatMaxConnCount;
-            comm.close();
+            comm?.close();
             return flag;
 
         }
@@ -142,11 +146,11 @@ namespace Common.Communication
                         isCheckCommState = false;
                         NoHeartBeatCount = 0;
                         CurrConnState = true;
-                        OnPortCheckSuccess?.Invoke();
+                        onPortCheckSuccess?.Invoke();
                     } break;
                 default: {
                         //其它数据转发，转给串网络发送
-                       
+                        onRelayDate?.Invoke(recData);
                     } break;
             }
         }
@@ -160,7 +164,9 @@ namespace Common.Communication
             }
         }
 
-        
+        public void sendMessage(byte[] bytes) {
+            comm?.sendMessage(bytes);
+        }
 
 
 
