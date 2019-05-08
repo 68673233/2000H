@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Communication;
 using Common.Save;
 using System;
 using System.Collections;
@@ -26,8 +27,6 @@ namespace WindowsServiceClient
             
         }
 
-        //string serviceFilePath = $"{Application.StartupPath}\\MyWindowsService.exe";
-        //string serviceName = "MyService";
         service.ServiceOpt server;
         IniFileOpt ini = null;
 
@@ -35,8 +34,7 @@ namespace WindowsServiceClient
         {
             if (!Directory.Exists(PathManage.LogDir)) Directory.CreateDirectory(PathManage.LogDir);
             Logger.Instance.init(PathManage.LogDir, OnLoggerI);
-
-
+            
         }
         private void initCtrl() {
             server = new service.ServiceOpt(PathManage.ServiceName);
@@ -49,6 +47,7 @@ namespace WindowsServiceClient
             button4.Click += new EventHandler(btn_Click);
             btn_SetAndRun.Click += new EventHandler(btn_SetAndRun_Click);
 
+            txt_port.KeyPress += new KeyPressEventHandler(txt_port_KeyPress);
 
             menuitem_showUI.Click += new EventHandler(menuItem_Click);
             menuitem_hideUI.Click += new EventHandler(menuItem_Click);
@@ -58,7 +57,14 @@ namespace WindowsServiceClient
 
 
         private void OnLoggerI(string content) {
-            MessageBox.Show(content);
+            if (this.InvokeRequired) {
+                Invoke(new Action<string>(OnLoggerI), content);
+            }
+            else {
+                if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                listBox1.Items.Add(content);
+            }
+
         }
 
         private void serviceState(int index) {
@@ -105,16 +111,35 @@ namespace WindowsServiceClient
                         }
                     } break;
             }
+            Logger.Instance.i("btn_click",(sender as Button).Text+" 服务完成！");
         }
 
         private void btn_SetAndRun_Click(object sender,EventArgs e) {
-            //if (ini==null) {
-            //    ini = new IniFileOpt(PathManage.IniFilePath);
-            //}
-            //ini.write("Ip", "192.168.1.10");
-            //MessageBox.Show( ini.read("Ip"));
-            Logger.Instance.i(" btn_setAndRun_click", "保存成功");
+            if (ini == null)
+            {
+                ini = new IniFileOpt(PathManage.IniFilePath);
+            }
+            txt_port.Text= int.Parse(txt_port.Text) > 65535 ? "10080" : txt_port.Text;
+            ini.write(IniFileOpt.IP, ipAddrText1.ipAddressString());
+            ini.write(IniFileOpt.Port,txt_port.Text);
+            Logger.Instance.i("btn_setAndRun_click", "ip:"+ipAddrText1.ipAddressString()+",port:"+txt_port.Text);
+            
+            //重新启动服务
 
+            //TcpHelper tcp = new TcpHelper(ipAddrText1.ipAddressString(), int.Parse(txt_port.Text));
+            //tcp.openSockect();
+            //byte[] bytes = new byte[] { 0xaa, 0x55, 0x55, 0xaa, 0x04, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+            //tcp.sendMessage(bytes);
+        }
+
+        private void txt_port_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar != '\b')//这是允许输入退格键
+            {
+                if ((e.KeyChar < '0') || (e.KeyChar > '9'))//这是允许输入0-9数字
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         private void menuItem_Click(object sender,EventArgs e) {
@@ -131,6 +156,7 @@ namespace WindowsServiceClient
                         notifyIcon1.Visible = true;
                     } break;
             }
+            Logger.Instance.i("menuItem",menuitem.Name+"_Click");
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -138,6 +164,7 @@ namespace WindowsServiceClient
             e.Cancel = true;
             this.Hide();
             notifyIcon1.Visible = true;
+            Logger.Instance.i("formClosing","formClosing");
         }
     }
 }

@@ -9,6 +9,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace MyWindowsService
 {
     public partial class MyService : ServiceBase
@@ -26,7 +27,11 @@ namespace MyWindowsService
             {
                 writer.WriteLine($"{DateTime.Now},服务启动！");
             }
+
+
         }
+
+        
 
         protected override void OnStop()
         {
