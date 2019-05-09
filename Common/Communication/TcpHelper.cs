@@ -61,7 +61,11 @@ namespace Common.Communication
             recieveSocket = null;
             return true;
         }
-
+        public bool IsConn() {
+            bool b = false;
+            b= recieveSocket?.IsConn==-1?false:true;
+            return b;
+        }
         //超时的处理
         private void RecieveTimeOut(object sender, System.Timers.ElapsedEventArgs e)
         {

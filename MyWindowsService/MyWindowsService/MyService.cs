@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -48,8 +49,8 @@ namespace MyWindowsService
                 }
                 
             }
+            initLoggerComm();
             IniFileOpt ini = new IniFileOpt(iniFilePath);
-
 
             commHelper = new CommHelper();
             commHelper.checkUsbState();
@@ -70,6 +71,10 @@ namespace MyWindowsService
             tcpHelper = new TcpHelper(ip,port);
             tcpHelper.onUncompressData = tcpReceiveData;
             tcpHelper.openSockect();
+            string isConn = tcpHelper.IsConn().ToString();
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+
+            
 
             Logger.Instance.i(Tag, "服务启动");
 
@@ -90,7 +95,29 @@ namespace MyWindowsService
             tcpHelper?.closeSocket();
             tcpHelper = null;
 
+            Logger.Instance.stopSocketService();
             Logger.Instance.i(Tag, "服务停止");
+        }
+
+        private void initLoggerComm() {
+            ThreadPool.RegisterWaitForSingleObject(new AutoResetEvent(true),new WaitOrTimerCallback(checkLoggerServer),null,3000,false);
+        }
+        private void checkLoggerServer(object state, bool timedout)
+        {
+            try
+            {
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_NULL, "1".Length, "1").toBytes());
+                bool b = Logger.Instance.TcpClientConnAction();
+                if (b == false)
+                {
+                    Logger.Instance.startSocketClient();
+                    string isConn = tcpHelper.IsConn().ToString();
+                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+                }
+            }
+            catch (Exception e) {
+                Logger.Instance.i(Tag,"尝试连接界面失败！");
+            }
         }
 
         /// <summary>

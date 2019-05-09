@@ -34,7 +34,7 @@ namespace WindowsServiceClient
         {
             if (!Directory.Exists(PathManage.LogDir)) Directory.CreateDirectory(PathManage.LogDir);
             Logger.Instance.init(PathManage.LogDir, OnLoggerI);
-            
+            Logger.Instance.startSocketService(OnLoggerParamToUI);
         }
         private void initCtrl() {
             server = new service.ServiceOpt(PathManage.ServiceName);
@@ -57,6 +57,29 @@ namespace WindowsServiceClient
         }
 
 
+        private void OnLoggerParamToUI(int type,string content) {
+            if (this.InvokeRequired) {
+                Invoke(new Action<int, string>(OnLoggerParamToUI), type, content);
+            }
+            else
+            {
+                switch (type)
+                {
+                    case LoggerInfoBean.TYPE_SerialState: {
+                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            listBox1.Items.Add("serialstate conn:"+content);
+                        } break;
+                    case LoggerInfoBean.TYPE_SocketState: {
+                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            listBox1.Items.Add("socketstate conn:" + content);
+                        } break;
+                    case LoggerInfoBean.TYPE_Record: {
+                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            listBox1.Items.Add("" + content);
+                        } break;
+                }
+            }
+        }
         private void OnLoggerI(string content) {
             if (this.InvokeRequired) {
                 Invoke(new Action<string>(OnLoggerI), content);
@@ -87,6 +110,8 @@ namespace WindowsServiceClient
                 label2.Text = s;
             }
         }
+
+
         private void btn_Click(object sender, EventArgs e)
         {
             switch ( (sender as Button).Name ) {
