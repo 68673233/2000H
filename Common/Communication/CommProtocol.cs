@@ -36,7 +36,10 @@ namespace Common.Communication
         private bool CurrConnState = false;
         private System.Timers.Timer heartbeatTimer;
 
-
+        //返回连接状态
+        public bool IsConn {
+            get { return CurrConnState; }
+        }
         //串口的数量由外面控制
         public string[] PortNames = getSerialNames();
 

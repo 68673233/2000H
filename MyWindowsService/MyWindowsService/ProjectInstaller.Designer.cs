@@ -39,8 +39,8 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "ME2000H";
-            this.serviceInstaller1.ServiceName = "MyService";
+            this.serviceInstaller1.Description = "提供设备与服务器之间的信息转发。";
+            this.serviceInstaller1.ServiceName = "ME2000HService";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller

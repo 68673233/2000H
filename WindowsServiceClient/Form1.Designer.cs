@@ -40,6 +40,8 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuitem_showUI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitem_hideUI = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuitem_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_SetAndRun = new System.Windows.Forms.Button();
             this.txt_port = new System.Windows.Forms.TextBox();
@@ -48,16 +50,20 @@
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuitem_exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.imageDevice = new System.Windows.Forms.PictureBox();
+            this.imageServer = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageServer)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(90, 66);
+            this.button1.Location = new System.Drawing.Point(67, 73);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -66,7 +72,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(190, 66);
+            this.button2.Location = new System.Drawing.Point(167, 73);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -75,7 +81,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(285, 66);
+            this.button3.Location = new System.Drawing.Point(262, 73);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 0;
@@ -84,7 +90,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(386, 66);
+            this.button4.Location = new System.Drawing.Point(363, 73);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 0;
@@ -123,19 +129,30 @@
             this.toolStripMenuItem1,
             this.menuitem_exit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 76);
             // 
             // menuitem_showUI
             // 
             this.menuitem_showUI.Name = "menuitem_showUI";
-            this.menuitem_showUI.Size = new System.Drawing.Size(152, 22);
+            this.menuitem_showUI.Size = new System.Drawing.Size(124, 22);
             this.menuitem_showUI.Text = "显示界面";
             // 
             // menuitem_hideUI
             // 
             this.menuitem_hideUI.Name = "menuitem_hideUI";
-            this.menuitem_hideUI.Size = new System.Drawing.Size(152, 22);
+            this.menuitem_hideUI.Size = new System.Drawing.Size(124, 22);
             this.menuitem_hideUI.Text = "隐藏界面";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(121, 6);
+            // 
+            // menuitem_exit
+            // 
+            this.menuitem_exit.Name = "menuitem_exit";
+            this.menuitem_exit.Size = new System.Drawing.Size(124, 22);
+            this.menuitem_exit.Text = "退出";
             // 
             // groupBox1
             // 
@@ -217,22 +234,51 @@
             this.listBox1.Size = new System.Drawing.Size(524, 206);
             this.listBox1.TabIndex = 0;
             // 
-            // toolStripMenuItem1
+            // label5
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(400, 17);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "设备连接：";
             // 
-            // menuitem_exit
+            // label6
             // 
-            this.menuitem_exit.Name = "menuitem_exit";
-            this.menuitem_exit.Size = new System.Drawing.Size(152, 22);
-            this.menuitem_exit.Text = "退出";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(387, 47);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(77, 12);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "服务器连接：";
+            // 
+            // imageDevice
+            // 
+            this.imageDevice.Image = global::WindowsServiceClient.Properties.Resources.noconn;
+            this.imageDevice.Location = new System.Drawing.Point(475, 9);
+            this.imageDevice.Name = "imageDevice";
+            this.imageDevice.Size = new System.Drawing.Size(25, 25);
+            this.imageDevice.TabIndex = 7;
+            this.imageDevice.TabStop = false;
+            // 
+            // imageServer
+            // 
+            this.imageServer.Image = global::WindowsServiceClient.Properties.Resources.noconn;
+            this.imageServer.Location = new System.Drawing.Point(475, 38);
+            this.imageServer.Name = "imageServer";
+            this.imageServer.Size = new System.Drawing.Size(25, 25);
+            this.imageServer.TabIndex = 7;
+            this.imageServer.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(524, 476);
+            this.Controls.Add(this.imageServer);
+            this.Controls.Add(this.imageDevice);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -251,6 +297,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageServer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -278,6 +326,10 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem menuitem_exit;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox imageDevice;
+        private System.Windows.Forms.PictureBox imageServer;
     }
 }
 

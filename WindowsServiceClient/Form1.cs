@@ -66,16 +66,25 @@ namespace WindowsServiceClient
                 switch (type)
                 {
                     case LoggerInfoBean.TYPE_SerialState: {
-                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            listBox1.Items.Add("serialstate conn:"+content);
+                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            //listBox1.Items.Add("serialstate conn:"+content);
+                            addUIList("serialstate conn:" + content);
+                            bool b = "True" == content;
+                            if (b) imageDevice.Image = global::WindowsServiceClient.Properties.Resources.conn;
+                            else imageDevice.Image = global::WindowsServiceClient.Properties.Resources.noconn;
                         } break;
                     case LoggerInfoBean.TYPE_SocketState: {
-                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            listBox1.Items.Add("socketstate conn:" + content);
+                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            //listBox1.Items.Add("socketstate conn:" + content);
+                            addUIList("socketstate conn:" + content);
+                            bool b = "True" == content;
+                            if (b) imageServer.Image = global::WindowsServiceClient.Properties.Resources.conn;
+                            else imageServer.Image = global::WindowsServiceClient.Properties.Resources.noconn;
                         } break;
                     case LoggerInfoBean.TYPE_Record: {
-                            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            listBox1.Items.Add("" + content);
+                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+                            //listBox1.Items.Add("" + content);
+                            addUIList(""+content);
                         } break;
                 }
             }
@@ -85,10 +94,15 @@ namespace WindowsServiceClient
                 Invoke(new Action<string>(OnLoggerI), content);
             }
             else {
-                if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                listBox1.Items.Add(content);
+                addUIList(content);
             }
 
+        }
+
+        private void addUIList(string content) {
+            if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
+            listBox1.Items.Add(content);
+            listBox1.SelectedIndex = listBox1.Items.Count-1;
         }
 
         private void serviceState(int index) {

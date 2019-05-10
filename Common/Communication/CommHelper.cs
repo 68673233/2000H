@@ -34,6 +34,15 @@ namespace Common.Communication
             }
         }
 
+        public bool IsConn {
+            get
+            {
+                bool conn = false;
+                if (comm != null) conn=comm.IsConn;
+                return conn;
+            }
+        }
+
         RegisteredWaitHandle registeredWaitHandle;
 
         private CommProtocol comm;

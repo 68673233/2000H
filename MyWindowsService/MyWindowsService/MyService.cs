@@ -18,11 +18,12 @@ namespace MyWindowsService
 {
     public partial class MyService : ServiceBase
     {
-        private const string Tag = "MyService";
+        private const string Tag = "ME2000HService";
+        private const string ProcessName = "ME2000HServiceProcess";
+        private const string ProcessExeName = "ME2000HServiceProcess.exe";
 
         CommHelper commHelper;
         TcpHelper tcpHelper;
-        //string filePath = @"D:\MyServiceLog.txt";
         string logDir;
         string iniFilePath;
 
@@ -34,17 +35,12 @@ namespace MyWindowsService
         
         protected override void OnStart(string[] args)
         {
-            //using (FileStream stream = new FileStream(filePath, FileMode.Append))
-            //using (StreamWriter writer = new StreamWriter(stream))
-            //{
-            //    writer.WriteLine($"{DateTime.Now},服务启动！");
-            //}
             foreach (Process prc in Process.GetProcesses())
             {
-                if (prc.ProcessName == "MyWindowsService")
+                if (prc.ProcessName == ProcessName)
                 {
-                    logDir = prc.MainModule.FileName.Replace("MyWindowsService.exe","Log");
-                    iniFilePath = prc.MainModule.FileName.Replace("MyWindowsService.exe", "config.ini");
+                    logDir = prc.MainModule.FileName.Replace(ProcessExeName, "Log");
+                    iniFilePath = prc.MainModule.FileName.Replace(ProcessExeName, "config.ini");
                     Logger.Instance.init(logDir, null);
                 }
                 
@@ -84,12 +80,6 @@ namespace MyWindowsService
 
         protected override void OnStop()
         {
-            //using (FileStream stream = new FileStream(filePath, FileMode.Append))
-            //using (StreamWriter writer = new StreamWriter(stream))
-            //{
-            //    writer.WriteLine($"{DateTime.Now},服务停止！");
-            //}
-
             commHelper?.unCheckUsbState();
             commHelper = null;
             tcpHelper?.closeSocket();
@@ -100,6 +90,7 @@ namespace MyWindowsService
         }
 
         private void initLoggerComm() {
+            //检验comm,socket的连接状态
             ThreadPool.RegisterWaitForSingleObject(new AutoResetEvent(true),new WaitOrTimerCallback(checkLoggerServer),null,3000,false);
         }
         private void checkLoggerServer(object state, bool timedout)
@@ -109,11 +100,28 @@ namespace MyWindowsService
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_NULL, "1".Length, "1").toBytes());
                 bool b = Logger.Instance.TcpClientConnAction();
                 if (b == false)
-                {
+                {   //将tcp的连接状态通过logger发送到界面
                     Logger.Instance.startSocketClient();
-                    string isConn = tcpHelper.IsConn().ToString();
+                    string isConn = tcpHelper?.IsConn().ToString();
                     Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+
+                    //将串口的连接状态通过logger发送到界面
+                    bool bCommConn = commHelper != null ? commHelper.IsConn : false;
+                    string isCommConn = bCommConn.ToString();
+                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isCommConn.Length, isCommConn).toBytes());
+                    return;
                 }
+
+                { 
+                string isConn = tcpHelper?.IsConn().ToString();
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+
+                //将串口的连接状态通过logger发送到界面
+                bool bCommConn = commHelper != null ? commHelper.IsConn : false;
+                string isCommConn = bCommConn.ToString();
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isCommConn.Length, isCommConn).toBytes());
+                }
+
             }
             catch (Exception e) {
                 Logger.Instance.i(Tag,"尝试连接界面失败！");

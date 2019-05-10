@@ -8,8 +8,8 @@ namespace WindowsServiceClient.Manage
 {
     class PathManage
     {
-       public static string ServiceFilePath = $"{Application.StartupPath}\\MyWindowsService.exe";
-       public static string ServiceName = "MyService";
+       public static string ServiceFilePath = $"{Application.StartupPath}\\ME2000HServiceProcess.exe";
+       public static string ServiceName = "ME2000HService";
 
        public static string IniFilePath= $"{Application.StartupPath}\\config.ini";
 

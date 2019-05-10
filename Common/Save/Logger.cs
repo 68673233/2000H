@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -111,6 +112,7 @@ namespace Common.Save
             _isAction = true;
             tcpServer = new TcpListener(IPAddress.Any, 10101);
             tcpServer.Start();
+            
             Thread t = new Thread(server);
             t.IsBackground = true;
             t.Start(tcpServer);
@@ -122,48 +124,51 @@ namespace Common.Save
             tcpServer = null;
         }
 
+        //private void ListenClientConnect() {
+        //    while (true) {
+        //        Socket clientSocket = serverSocket.Accept();
+        //        clientSockets.Add(clientSocket);
+        //        Thread receiveThread = new Thread(ReceiveMessage);
+        //        receiveThread.Start(clientSocket);
+        //    }
+        //}
+
         private void server(object o)
         {
-            
-                TcpListener list = o as TcpListener;
+            TcpListener list = o as TcpListener;
+            TcpClient client = list.AcceptTcpClient();
+
             while (_isAction)
             {
                 const int buffer = 1024;
                 byte[] b = new byte[buffer];
-                TcpClient client = list.AcceptTcpClient();
-                client.Client.Receive(b);
-                //using (NetworkStream strem = client.GetStream())
                 {
-                    //if (strem.DataAvailable)
-                    {
-                        
+                    
                         try
                         {
-                            //int r = strem.Read(b, 0, buffer);
-
+                        client.Client.Receive(b);
+                        int i = 0;
+                        while (b[i]!=0) {
                             //解析
                             if (b.Length > 8 && OnParamToUI != null)
                             {
-                                int type = b[0] | b[1] << 8 | b[2] << 16 | b[3] << 24;
-                                int len = b[4] | b[5] << 8 | b[6] << 16 | b[7] << 24;
+                                int type = b[i+0] | b[i+1] << 8 | b[i+2] << 16 | b[i+3] << 24;
+                                int len = b[i+4] | b[i + 5] << 8 | b[i + 6] << 16 | b[i + 7] << 24;
                                 byte[] bytes = new byte[len];
-                                Array.Copy(b, 8, bytes, 0, len);
+                                Array.Copy(b, i+8, bytes, 0, len);
                                 string str = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                                 OnParamToUI?.Invoke(type, str);
+                                i = i + 8+len;
                             }
+                         }
                         }
                         catch (Exception e)
                         {
                             Logger.Instance.i(TAG,"recieve error:"+e);
-                        }
-
-                        //strem.Close();
+                            client = list.AcceptTcpClient();
                     }
                 }
             }
-            
-
-
         }
 
         public void startSocketClient() {
@@ -191,8 +196,7 @@ namespace Common.Save
             try
             {   if (tcpClient!=null)
                 {
-                    tcpClient.Client.Send(bytes);
-
+                   tcpClient.Client.Send(bytes);
                     //NetworkStream strem = tcpClient.GetStream();
                     ////byte[] b = Encoding.UTF8.GetBytes(str);
                     //strem.Write(bytes, 0, bytes.Length);
@@ -200,6 +204,7 @@ namespace Common.Save
                 }
             }
             catch (Exception e) {
+                if (bytes[0] == LoggerInfoBean.TYPE_NULL) return;
                 Logger.Instance.i(TAG,"sendMessageToService error: "+e.ToString());
             }
         }
