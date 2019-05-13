@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Common.Save;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -55,6 +57,9 @@ namespace Common.Communication
 
         }
 
+        public void setAutoCheckCom(bool enabled) {
+            heartbeatTimer.Enabled = enabled;
+        }
         private void heartbeatElapsedEvent(object sender, ElapsedEventArgs e)
         {
             NoHeartBeatCount++;
@@ -69,7 +74,7 @@ namespace Common.Communication
             {
                 //发心跳包
                 this.connDev();
-                //Console.Write("send 0x03!");
+                Logger.Instance.i("comm","心跳连接！");
             }
             else
             {
@@ -122,11 +127,11 @@ namespace Common.Communication
                     comm.close();
                     System.Threading.Thread.Sleep(10);
                 }
-                comm = new CommPort(PortNames[i], 9600);
+                comm = new CommPort(PortNames[i], 115200);
 
                 comm.receiveData += receivedData;
                 bool b;
-                if (b = comm.open()) { this.connDev(); }
+                if (b = comm.open()) { this.connDev(); Logger.Instance.i("comm","探测串口！连接"); }
 
 
                 System.Threading.Thread.Sleep(300);
@@ -142,7 +147,9 @@ namespace Common.Communication
 
         public void receivedData(byte[] recData) {
             if (recData.Length < 12) return;
-            int type = recData[8] | recData[9] << 8 | recData[10] << 16 | recData[11] << 24;
+            //int type = recData[8] | recData[9] << 8 | recData[10] << 16 | recData[11] << 24;
+            int type = recData[11] | recData[10] << 8 | recData[9] << 16 | recData[8] << 24;
+            Logger.Instance.i("comm", "接收数据 type:" + type);
             switch (type) {
                 case 0xA030: {
                         //连接状态
@@ -159,8 +166,9 @@ namespace Common.Communication
         }
         public void connDev()
         {
-            byte[] bytes = { 0xAA,0x55,0x55,0xAA,0x04,0x00,0x00,0x00, 0x30, 0, 0,0 };
+            byte[] bytes = { 0x55,0xAA,0xAA,0x55,0x00,0x00,0x00,0x08, 0x00, 0, 0,0x30 };
             CurrCommand = bytes[8] | bytes[9] << 8 | bytes[10] << 16 | bytes[11] << 24;
+            Logger.Instance.i("comm","发送数据");
             if (comm != null)
             {
                 comm.sendMessage(bytes);

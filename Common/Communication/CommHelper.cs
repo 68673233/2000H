@@ -49,7 +49,7 @@ namespace Common.Communication
         public CommHelper() {
             comm = new CommProtocol();
             comm.OnPortCheckSuccess = onPortCheckSuccess;
-            
+            comm.setAutoCheckCom(true);
         }
 
         public void checkUsbState() {
