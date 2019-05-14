@@ -13,6 +13,7 @@ namespace WindowsServiceClient.controls
     {
 
         bool textBoxValid = true;
+        bool EventEnable = true;
 
         public IpAddrText()
         {
@@ -92,6 +93,8 @@ namespace WindowsServiceClient.controls
         }
 
         private void textBox1OnTextChanged(object sender,EventArgs e) {
+            if (EventEnable == false) return;
+
             int len = textBox1.Text.Length;
             if (len == 3)
             {
@@ -124,6 +127,8 @@ namespace WindowsServiceClient.controls
         }
         private void textBoxOnTextChanged(object sender, EventArgs e)
         {
+            if (EventEnable == false) return;
+
             TextBox textBox = sender as TextBox;
             int len = textBox.Text.Length;
             if (len == 3)
@@ -177,12 +182,20 @@ namespace WindowsServiceClient.controls
             string[] textIpAddress = ipAddressStr.Split('.');
             try
             {
+                EventEnable = false;
                 textBox1.Text = textIpAddress[0];
                 textBox2.Text = textIpAddress[1];
                 textBox3.Text = textIpAddress[2];
                 textBox4.Text = textIpAddress[3];
+
             }
-            catch { }
+            catch (Exception e)
+            {
+
+            }
+            finally {
+                EventEnable = true;
+            }
         } 
         #endregion
     }

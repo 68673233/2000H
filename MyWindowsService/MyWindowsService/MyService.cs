@@ -80,6 +80,10 @@ namespace MyWindowsService
 
         protected override void OnStop()
         {
+            string isConn = "False";
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isConn.Length, isConn).toBytes());
+
             commHelper?.unCheckUsbState();
             commHelper = null;
             tcpHelper?.closeSocket();

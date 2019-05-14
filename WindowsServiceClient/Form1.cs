@@ -24,7 +24,7 @@ namespace WindowsServiceClient
             InitializeComponent();
             initClass();
             initCtrl();
-            
+            initParamToUI();
         }
 
         service.ServiceOpt server;
@@ -53,9 +53,23 @@ namespace WindowsServiceClient
             menuitem_hideUI.Click += new EventHandler(menuItem_Click);
             menuitem_exit.Click += new EventHandler(menuItem_Click);
 
+            menuitem_clear.Click += new EventHandler(listbox_MenuItem_Click);
+            listBox1.MouseUp += new MouseEventHandler(listbox_MouseUp);
+
             this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
         }
 
+        private void initParamToUI() {
+            if (ini == null)
+            {
+                ini = new IniFileOpt(PathManage.IniFilePath);
+            }
+            string ip = ini.read(IniFileOpt.IP);
+            string port = ini.read(IniFileOpt.Port);
+            ipAddrText1.setIpAddress(ip);
+            txt_port.Text = port;
+
+        }
 
         private void OnLoggerParamToUI(int type,string content) {
             if (this.InvokeRequired) {
@@ -125,6 +139,63 @@ namespace WindowsServiceClient
             }
         }
 
+        /// <summary>
+        /// 重新启动服务
+        /// </summary>
+        /// <param name="currstate"></param>
+        private void RebootService() {
+            string s = "";
+            int currstate= server.getServiceState(PathManage.ServiceName);
+            switch (currstate)
+            {
+                case 0:
+                    {
+                        s = "服务未安装";
+                        server.InstallService(PathManage.ServiceFilePath);
+                        System.Threading.Thread.Sleep(100);
+                        RebootService( );
+                    } break;
+                case (int)ServiceControllerStatus.Stopped:
+                    {
+                        s = "服务未运行";
+                        server.ServiceStart(PathManage.ServiceName);
+                        RebootService();
+                    } break;
+                case (int)ServiceControllerStatus.StartPending:
+                    {
+                        s = "服务正在启动";
+                        System.Threading.Thread.Sleep(100);
+                        RebootService();
+                    } break;
+                case (int)ServiceControllerStatus.StopPending:
+                    {
+                        s = "服务正在停止";
+                        System.Threading.Thread.Sleep(100);
+                        RebootService();
+                    } break;
+                case (int)ServiceControllerStatus.Running: {
+                        s = "服务正在运行";
+                    } break;
+                case (int)ServiceControllerStatus.ContinuePending:
+                    {
+                        s = "服务即将继续";
+                        System.Threading.Thread.Sleep(100);
+                        RebootService();
+                    } break;
+                case (int)ServiceControllerStatus.PausePending:
+                    {
+                        s = "服务即将停止";
+                        System.Threading.Thread.Sleep(100);
+                        RebootService();
+                    } break;
+                case (int)ServiceControllerStatus.Paused:
+                    {
+                        s = "服务已停止";
+                        server.ServiceStart(PathManage.ServiceName);
+                        RebootService();
+                    } break;
+            }
+        }
 
         private void btn_Click(object sender, EventArgs e)
         {
@@ -163,8 +234,12 @@ namespace WindowsServiceClient
             ini.write(IniFileOpt.IP, ipAddrText1.ipAddressString());
             ini.write(IniFileOpt.Port,txt_port.Text);
             Logger.Instance.i("btn_setAndRun_click", "ip:"+ipAddrText1.ipAddressString()+",port:"+txt_port.Text);
-            
+
             //重新启动服务
+            if (server.getServiceState(PathManage.ServiceName) == (int)ServiceControllerStatus.Running) {
+                server.ServiceStop(PathManage.ServiceName);
+            }
+            RebootService();
 
             //TcpHelper tcp = new TcpHelper(ipAddrText1.ipAddressString(), int.Parse(txt_port.Text));
             //tcp.openSockect();
@@ -201,6 +276,23 @@ namespace WindowsServiceClient
                     } break;
             }
             Logger.Instance.i("menuItem",menuitem.Name+"_Click");
+        }
+
+        private void listbox_MenuItem_Click(object sender,EventArgs e) {
+            ToolStripMenuItem menuitem = sender as ToolStripMenuItem;
+            switch (menuitem.Name) {
+                case "menuitem_clear":
+                    {
+                        listBox1.Items.Clear();
+                    } break;
+            }
+        }
+
+        private void listbox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) {
+                listbox1_menu.Show(this.listBox1,e.Location);
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

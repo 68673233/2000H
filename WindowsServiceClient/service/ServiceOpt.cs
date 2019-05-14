@@ -6,6 +6,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using WindowsServiceClient.Manage;
 
 namespace WindowsServiceClient.service
 {
@@ -62,6 +63,8 @@ namespace WindowsServiceClient.service
         //安装服务
         public void InstallService(string serviceFilePath)
         {
+            bool b= IsServiceExisted(PathManage.ServiceName);
+            if (b == true) return;
             using (AssemblyInstaller installer = new AssemblyInstaller())
             {
                 installer.UseNewContext = true;
@@ -75,6 +78,8 @@ namespace WindowsServiceClient.service
         //卸载服务
         public void UninstallService(string serviceFilePath)
         {
+            bool b = IsServiceExisted(PathManage.ServiceName);
+            if (b == false) return;
             using (AssemblyInstaller installer = new AssemblyInstaller())
             {
                 installer.UseNewContext = true;

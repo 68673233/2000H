@@ -45,7 +45,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_SetAndRun = new System.Windows.Forms.Button();
             this.txt_port = new System.Windows.Forms.TextBox();
-            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -54,11 +53,15 @@
             this.label6 = new System.Windows.Forms.Label();
             this.imageDevice = new System.Windows.Forms.PictureBox();
             this.imageServer = new System.Windows.Forms.PictureBox();
+            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
+            this.listbox1_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuitem_clear = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageServer)).BeginInit();
+            this.listbox1_menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -187,16 +190,6 @@
             this.txt_port.TabIndex = 2;
             this.txt_port.Text = "10080";
             // 
-            // ipAddrText1
-            // 
-            this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipAddrText1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ipAddrText1.Location = new System.Drawing.Point(75, 27);
-            this.ipAddrText1.Margin = new System.Windows.Forms.Padding(5);
-            this.ipAddrText1.Name = "ipAddrText1";
-            this.ipAddrText1.Size = new System.Drawing.Size(170, 27);
-            this.ipAddrText1.TabIndex = 1;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -270,6 +263,29 @@
             this.imageServer.TabIndex = 7;
             this.imageServer.TabStop = false;
             // 
+            // ipAddrText1
+            // 
+            this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipAddrText1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ipAddrText1.Location = new System.Drawing.Point(75, 27);
+            this.ipAddrText1.Margin = new System.Windows.Forms.Padding(5);
+            this.ipAddrText1.Name = "ipAddrText1";
+            this.ipAddrText1.Size = new System.Drawing.Size(170, 27);
+            this.ipAddrText1.TabIndex = 1;
+            // 
+            // listbox1_menu
+            // 
+            this.listbox1_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuitem_clear});
+            this.listbox1_menu.Name = "listbox1_menu";
+            this.listbox1_menu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // menuitem_clear
+            // 
+            this.menuitem_clear.Name = "menuitem_clear";
+            this.menuitem_clear.Size = new System.Drawing.Size(152, 22);
+            this.menuitem_clear.Text = "清空";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -299,6 +315,7 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageServer)).EndInit();
+            this.listbox1_menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,6 +347,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox imageDevice;
         private System.Windows.Forms.PictureBox imageServer;
+        private System.Windows.Forms.ContextMenuStrip listbox1_menu;
+        private System.Windows.Forms.ToolStripMenuItem menuitem_clear;
     }
 }
 
