@@ -187,7 +187,6 @@ namespace WindowsServiceClient.controls
                 textBox2.Text = textIpAddress[1];
                 textBox3.Text = textIpAddress[2];
                 textBox4.Text = textIpAddress[3];
-
             }
             catch (Exception e)
             {

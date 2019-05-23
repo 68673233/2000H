@@ -147,8 +147,8 @@ namespace Common.Communication
 
         public void receivedData(byte[] recData) {
             if (recData.Length < 12) return;
-            //int type = recData[8] | recData[9] << 8 | recData[10] << 16 | recData[11] << 24;
-            int type = recData[11] | recData[10] << 8 | recData[9] << 16 | recData[8] << 24;
+            int type = recData[8] | recData[9] << 8 | recData[10] << 16 | recData[11] << 24;
+            //int type = recData[11] | recData[10] << 8 | recData[9] << 16 | recData[8] << 24;
             Logger.Instance.i("comm", "接收数据 type:" + type);
             switch (type) {
                 case 0xA030: {
@@ -166,7 +166,7 @@ namespace Common.Communication
         }
         public void connDev()
         {
-            byte[] bytes = { 0x55,0xAA,0xAA,0x55,0x00,0x00,0x00,0x08, 0x00, 0, 0,0x30 };
+            byte[] bytes = { 0xAA,0x55,0x55,0xAA,0x04,0x00,0x00,0x00, 0x30, 0, 0,0x00 };
             CurrCommand = bytes[8] | bytes[9] << 8 | bytes[10] << 16 | bytes[11] << 24;
             Logger.Instance.i("comm","发送数据");
             if (comm != null)

@@ -63,6 +63,7 @@ namespace Common.Communication
         }
         public bool IsConn() {
             bool b = false;
+            if (recieveSocket == null) return b;
             b= recieveSocket?.IsConn==-1?false:true;
             return b;
         }
