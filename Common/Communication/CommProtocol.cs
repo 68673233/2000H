@@ -146,29 +146,39 @@ namespace Common.Communication
         }
 
         public void receivedData(byte[] recData) {
+            //Logger.Instance.i("comm", "接收到数据 len:"+recData.Length +"  bytes:" + Common.Utils.CommonUtils.ToHexString(recData));
             if (recData.Length < 12) return;
-            int type = recData[8] | recData[9] << 8 | recData[10] << 16 | recData[11] << 24;
-            //int type = recData[11] | recData[10] << 8 | recData[9] << 16 | recData[8] << 24;
-            Logger.Instance.i("comm", "接收数据 type:" + type);
-            switch (type) {
-                case 0xA030: {
-                        //连接状态
-                        isCheckCommState = false;
-                        NoHeartBeatCount = 0;
-                        CurrConnState = true;
-                        onPortCheckSuccess?.Invoke();
-                    } break;
-                default: {
-                        //其它数据转发，转给串网络发送
-                        onRelayDate?.Invoke(recData);
-                    } break;
+            int star = 0;
+            for (;star<recData.Length;) {
+                int type = recData[8 + star] | recData[9 + star] << 8 | recData[10 + star] << 16 | recData[11 + star] << 24;
+                int len= recData[4+star] | recData[5 + star] << 8 | recData[6 + star] << 16 | recData[7 + star] << 24;
+                
+                //int type = recData[11] | recData[10] << 8 | recData[9] << 16 | recData[8] << 24;
+
+                switch (type) {
+                    case 0xA030: {
+                            //连接状态
+                            isCheckCommState = false;
+                            NoHeartBeatCount = 0;
+                            CurrConnState = true;
+                            onPortCheckSuccess?.Invoke();
+
+                        } break;
+                    default: {
+                            //其它数据转发，转给串网络发送
+                            byte[] bytes = new byte[8+len];
+                            Array.Copy(recData,star, bytes,0, bytes.Length);
+                            onRelayDate?.Invoke(bytes);
+                        } break;
+                }
+                star = 4 + 4 + len;
             }
         }
         public void connDev()
         {
             byte[] bytes = { 0xAA,0x55,0x55,0xAA,0x04,0x00,0x00,0x00, 0x30, 0, 0,0x00 };
             CurrCommand = bytes[8] | bytes[9] << 8 | bytes[10] << 16 | bytes[11] << 24;
-            Logger.Instance.i("comm","发送数据");
+            //Logger.Instance.i("comm","发送连接数据");
             if (comm != null)
             {
                 comm.sendMessage(bytes);

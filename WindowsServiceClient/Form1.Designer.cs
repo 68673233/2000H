@@ -53,9 +53,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.imageDevice = new System.Windows.Forms.PictureBox();
             this.imageServer = new System.Windows.Forms.PictureBox();
-            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.listbox1_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuitem_clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -122,7 +122,6 @@
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
             // 
             // contextMenuStrip1
             // 
@@ -263,6 +262,19 @@
             this.imageServer.TabIndex = 7;
             this.imageServer.TabStop = false;
             // 
+            // listbox1_menu
+            // 
+            this.listbox1_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuitem_clear});
+            this.listbox1_menu.Name = "listbox1_menu";
+            this.listbox1_menu.Size = new System.Drawing.Size(101, 26);
+            // 
+            // menuitem_clear
+            // 
+            this.menuitem_clear.Name = "menuitem_clear";
+            this.menuitem_clear.Size = new System.Drawing.Size(100, 22);
+            this.menuitem_clear.Text = "清空";
+            // 
             // ipAddrText1
             // 
             this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -272,19 +284,6 @@
             this.ipAddrText1.Name = "ipAddrText1";
             this.ipAddrText1.Size = new System.Drawing.Size(170, 27);
             this.ipAddrText1.TabIndex = 1;
-            // 
-            // listbox1_menu
-            // 
-            this.listbox1_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuitem_clear});
-            this.listbox1_menu.Name = "listbox1_menu";
-            this.listbox1_menu.Size = new System.Drawing.Size(153, 48);
-            // 
-            // menuitem_clear
-            // 
-            this.menuitem_clear.Name = "menuitem_clear";
-            this.menuitem_clear.Size = new System.Drawing.Size(152, 22);
-            this.menuitem_clear.Text = "清空";
             // 
             // Form1
             // 

@@ -57,6 +57,7 @@ namespace WindowsServiceClient
             listBox1.MouseUp += new MouseEventHandler(listbox_MouseUp);
 
             this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
+            notifyIcon1.MouseDoubleClick += new MouseEventHandler(notifyIconMouseDoubleClick);
         }
 
         private void initParamToUI() {
@@ -80,25 +81,19 @@ namespace WindowsServiceClient
                 switch (type)
                 {
                     case LoggerInfoBean.TYPE_SerialState: {
-                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            //listBox1.Items.Add("serialstate conn:"+content);
-                            addUIList("serialstate conn:" + content);
+                            //addUIList("serialstate conn:" + content);
                             bool b = "True" == content;
                             if (b) imageDevice.Image = global::WindowsServiceClient.Properties.Resources.conn;
                             else imageDevice.Image = global::WindowsServiceClient.Properties.Resources.noconn;
                         } break;
                     case LoggerInfoBean.TYPE_SocketState: {
-                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            //listBox1.Items.Add("socketstate conn:" + content);
-                            addUIList("socketstate conn:" + content);
+                            //addUIList("socketstate conn:" + content);
                             bool b = "True" == content;
                             if (b) imageServer.Image = global::WindowsServiceClient.Properties.Resources.conn;
                             else imageServer.Image = global::WindowsServiceClient.Properties.Resources.noconn;
                         } break;
                     case LoggerInfoBean.TYPE_Record: {
-                            //if (listBox1.Items.Count > 3000) listBox1.Items.RemoveAt(0);
-                            //listBox1.Items.Add("" + content);
-                            addUIList(""+content);
+                            addUIList("record--"+content);
                         } break;
                 }
             }
@@ -276,6 +271,11 @@ namespace WindowsServiceClient
                     } break;
             }
             Logger.Instance.i("menuItem",menuitem.Name+"_Click");
+        }
+
+        void notifyIconMouseDoubleClick(object sender, MouseEventArgs e) {
+            this.Show();
+            notifyIcon1.Visible = false;
         }
 
         private void listbox_MenuItem_Click(object sender,EventArgs e) {

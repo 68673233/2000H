@@ -140,7 +140,7 @@ namespace Common.Save
 
             while (_isAction)
             {
-                const int buffer = 1024;
+                const int buffer = 81920;
                 byte[] b = new byte[buffer];
                 {
                     
@@ -233,13 +233,15 @@ namespace Common.Save
         public int type;
         public int len;
         public string content;
-        public LoggerInfoBean(int type,int len,string content) {
+        public LoggerInfoBean(int type,string content) {
             this.type = type;
-            this.len = len;
             this.content = content;
         }
 
         public byte[] toBytes() {
+            byte[] c = Encoding.UTF8.GetBytes(content);
+            len = c.Length;
+
             List<byte> list = new List<byte>();
             list.Add((byte)type);
             list.Add( (byte)(type >> 8));
@@ -250,7 +252,7 @@ namespace Common.Save
             list.Add((byte)(len>>8));
             list.Add((byte)(len>>16));
             list.Add((byte)(len>>24));
-            byte[] c = Encoding.UTF8.GetBytes(content);
+            
 
             list.AddRange(c);
             return list.ToArray();

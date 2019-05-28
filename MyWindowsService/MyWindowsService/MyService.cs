@@ -68,7 +68,7 @@ namespace MyWindowsService
             tcpHelper.onUncompressData = tcpReceiveData;
             tcpHelper.openSockect();
             string isConn = tcpHelper.IsConn().ToString();
-            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState,  isConn).toBytes());
 
             
 
@@ -81,8 +81,8 @@ namespace MyWindowsService
         protected override void OnStop()
         {
             string isConn = "False";
-            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
-            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isConn.Length, isConn).toBytes());
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn).toBytes());
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isConn).toBytes());
 
             commHelper?.unCheckUsbState();
             commHelper = null;
@@ -101,29 +101,29 @@ namespace MyWindowsService
         {
             try
             {
-                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_NULL, "1".Length, "1").toBytes());
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_NULL,  "1").toBytes());
                 bool b = Logger.Instance.TcpClientConnAction();
                 if (b == false)
                 {   //将tcp的连接状态通过logger发送到界面
                     Logger.Instance.startSocketClient();
                     string isConn = tcpHelper?.IsConn().ToString();
-                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn).toBytes());
 
                     //将串口的连接状态通过logger发送到界面
                     bool bCommConn = commHelper != null ? commHelper.IsConn : false;
                     string isCommConn = bCommConn.ToString();
-                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isCommConn.Length, isCommConn).toBytes());
+                    Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isCommConn).toBytes());
                     return;
                 }
 
                 { 
                 string isConn = tcpHelper?.IsConn().ToString();
-                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn.Length, isConn).toBytes());
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn).toBytes());
 
                 //将串口的连接状态通过logger发送到界面
                 bool bCommConn = commHelper != null ? commHelper.IsConn : false;
                 string isCommConn = bCommConn.ToString();
-                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isCommConn.Length, isCommConn).toBytes());
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState,  isCommConn).toBytes());
                 }
 
             }
@@ -137,16 +137,31 @@ namespace MyWindowsService
         /// </summary>
         /// <param name="bytes"></param>
         private void relayData(byte[] bytes) {
-            Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
-            tcpHelper?.sendMessage(bytes);
+            //Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
+            //string s = "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
+            try
+            {
+                tcpHelper?.sendMessage(bytes);
+            }
+            catch (Exception e) {
+                //Logger.Instance.i(Tag, "数据异常 串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
+                Logger.Instance.i(Tag, "串口接收到数据转发给网络时数据异常 :"+e.ToString());
+            }
             
         }
         private int tcpReceiveData(byte[] data,int len ) {
-            byte[] bytes = new byte[len];
-            Array.Copy(data, bytes, len);
-            Logger.Instance.i(Tag, "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
-            commHelper?.sendMessage(bytes);
-            
+            try
+            {
+                byte[] bytes = new byte[len];
+                Array.Copy(data, bytes, len);
+                //Logger.Instance.i(Tag, "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
+                //string s = "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
+                //Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
+                commHelper?.sendMessage(bytes);
+            }
+            catch (Exception e) {
+                Logger.Instance.i(Tag,"网络接收到的数据转发给串口时异常："+e.ToString());
+            }
             return 0;
         }
 

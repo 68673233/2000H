@@ -172,7 +172,7 @@ namespace Common.Communication
         {
             if (client == null) return;
             NetworkStream ns = client.GetStream();
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[8192];
             int bytesread = 0;
             //StreamReader sr = new StreamReader(ns);//流读写器
             //字组处理
