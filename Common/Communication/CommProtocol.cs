@@ -31,7 +31,7 @@ namespace Common.Communication
         //当前指令
         private int CurrCommand;
         //心跳未连接成功次数
-        private int NoHeartBeatCount = 0;
+        private volatile int NoHeartBeatCount = 0;
         //心跳连接最大次数
         private const int HeartBeatMaxConnCount = 4;
         //连接状态
@@ -52,6 +52,7 @@ namespace Common.Communication
             heartbeatTimer = new System.Timers.Timer();
             heartbeatTimer.AutoReset = true;
             heartbeatTimer.Elapsed += new ElapsedEventHandler(heartbeatElapsedEvent);
+            //heartbeatTimer.Elapsed += new ElapsedEventHandler((s, e) => heartbeatElapsedEvent(s, e,ref NoHeartBeatCount));
             heartbeatTimer.Interval = 1000;
             heartbeatTimer.Enabled = false;
 
@@ -149,7 +150,7 @@ namespace Common.Communication
             //Logger.Instance.i("comm", "接收到数据 len:"+recData.Length +"  bytes:" + Common.Utils.CommonUtils.ToHexString(recData));
             if (recData.Length < 12) return;
             int star = 0;
-            for (;star<recData.Length;) {
+            while (star<recData.Length) {
                 int type = recData[8 + star] | recData[9 + star] << 8 | recData[10 + star] << 16 | recData[11 + star] << 24;
                 int len= recData[4+star] | recData[5 + star] << 8 | recData[6 + star] << 16 | recData[7 + star] << 24;
                 
@@ -171,7 +172,7 @@ namespace Common.Communication
                             onRelayDate?.Invoke(bytes);
                         } break;
                 }
-                star = 4 + 4 + len;
+                star =star+ 4 + 4 + len;
             }
         }
         public void connDev()

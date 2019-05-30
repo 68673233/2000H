@@ -70,8 +70,8 @@ namespace MyWindowsService
             string isConn = tcpHelper.IsConn().ToString();
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState,  isConn).toBytes());
 
-            
 
+            commHelper.sendMessage(new byte[] {0x55,0xAA,0xAA,0x55,0x01 });
             Logger.Instance.i(Tag, "服务启动");
 
         }
@@ -137,7 +137,7 @@ namespace MyWindowsService
         /// </summary>
         /// <param name="bytes"></param>
         private void relayData(byte[] bytes) {
-            //Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
+            Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
             //string s = "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
             try
             {
@@ -154,7 +154,7 @@ namespace MyWindowsService
             {
                 byte[] bytes = new byte[len];
                 Array.Copy(data, bytes, len);
-                //Logger.Instance.i(Tag, "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
+                Logger.Instance.i(Tag, "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
                 //string s = "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
                 //Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
                 commHelper?.sendMessage(bytes);
