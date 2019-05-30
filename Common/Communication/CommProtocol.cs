@@ -38,6 +38,11 @@ namespace Common.Communication
         private bool CurrConnState = false;
         private System.Timers.Timer heartbeatTimer;
 
+        /// <summary>
+        /// 串口通信状态
+        /// </summary>
+        private bool commState = false;
+
         //返回连接状态
         public bool IsConn {
             get { return CurrConnState; }
@@ -69,16 +74,21 @@ namespace Common.Communication
                 NoHeartBeatCount = 0;
                 CurrConnState = false;
                 OnPortCheckError?.Invoke();
+                Logger.Instance.i("comm","连接设备心跳断开!");
                 return;
             }
             if (CurrConnState)
             {
+                if (commState==false) Logger.Instance.i("comm", "心跳连接！");
                 //发心跳包
                 this.connDev();
-                Logger.Instance.i("comm","心跳连接！");
+                commState = true;
+                
             }
             else
             {
+                if (commState == true) Logger.Instance.i("comm","查找连接设备端口！");
+                commState = false;
                 //未连接，查找连接设备的端口
                 this.checkDevComm();
             }
@@ -96,6 +106,9 @@ namespace Common.Communication
             comm?.close();
             return flag;
 
+        }
+        public void closePort() {
+             comm?.close();
         }
 
         public void checkDevComm()
@@ -174,6 +187,7 @@ namespace Common.Communication
                 }
                 star =star+ 4 + 4 + len;
             }
+            
         }
         public void connDev()
         {
@@ -182,12 +196,12 @@ namespace Common.Communication
             //Logger.Instance.i("comm","发送连接数据");
             if (comm != null)
             {
-                comm.sendMessage(bytes);
+                comm.sendMessage(bytes,false);
             }
         }
 
         public void sendMessage(byte[] bytes) {
-            comm?.sendMessage(bytes);
+            comm?.sendMessage(bytes,true);
         }
 
 

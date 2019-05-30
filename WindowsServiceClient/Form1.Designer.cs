@@ -55,6 +55,8 @@
             this.imageServer = new System.Windows.Forms.PictureBox();
             this.listbox1_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuitem_clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -165,7 +167,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(39, 132);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(465, 116);
+            this.groupBox1.Size = new System.Drawing.Size(450, 116);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "网络设置";
@@ -213,7 +215,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 270);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(524, 206);
+            this.panel1.Size = new System.Drawing.Size(531, 206);
             this.panel1.TabIndex = 5;
             // 
             // listBox1
@@ -223,13 +225,13 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(524, 206);
+            this.listBox1.Size = new System.Drawing.Size(531, 206);
             this.listBox1.TabIndex = 0;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(400, 17);
+            this.label5.Location = new System.Drawing.Point(385, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 6;
@@ -238,7 +240,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(387, 47);
+            this.label6.Location = new System.Drawing.Point(372, 52);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 12);
             this.label6.TabIndex = 6;
@@ -247,7 +249,7 @@
             // imageDevice
             // 
             this.imageDevice.Image = global::WindowsServiceClient.Properties.Resources.noconn;
-            this.imageDevice.Location = new System.Drawing.Point(475, 9);
+            this.imageDevice.Location = new System.Drawing.Point(460, 14);
             this.imageDevice.Name = "imageDevice";
             this.imageDevice.Size = new System.Drawing.Size(25, 25);
             this.imageDevice.TabIndex = 7;
@@ -256,7 +258,7 @@
             // imageServer
             // 
             this.imageServer.Image = global::WindowsServiceClient.Properties.Resources.noconn;
-            this.imageServer.Location = new System.Drawing.Point(475, 38);
+            this.imageServer.Location = new System.Drawing.Point(460, 43);
             this.imageServer.Name = "imageServer";
             this.imageServer.Size = new System.Drawing.Size(25, 25);
             this.imageServer.TabIndex = 7;
@@ -275,6 +277,24 @@
             this.menuitem_clear.Size = new System.Drawing.Size(100, 22);
             this.menuitem_clear.Text = "清空";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(45, 251);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 12);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "label7";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(311, 251);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "label8";
+            // 
             // ipAddrText1
             // 
             this.ipAddrText1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -289,7 +309,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 476);
+            this.ClientSize = new System.Drawing.Size(531, 476);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.imageServer);
             this.Controls.Add(this.imageDevice);
             this.Controls.Add(this.label6);
@@ -348,6 +370,8 @@
         private System.Windows.Forms.PictureBox imageServer;
         private System.Windows.Forms.ContextMenuStrip listbox1_menu;
         private System.Windows.Forms.ToolStripMenuItem menuitem_clear;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
     }
 }
 

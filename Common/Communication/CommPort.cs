@@ -534,6 +534,13 @@ namespace Common.Communication
 
         #endregion
 
+        #region Message
+        struct Message {
+           public  byte[] message;
+           public bool isClearReceiveBuffer;
+        }
+        #endregion
+
         #region 串口操作类
 
         int EV_RXCHAR = 0x0001;
@@ -543,7 +550,8 @@ namespace Common.Communication
 
         private Thread threadWrite = null;
         private Thread threadRead;
-        List<byte[]> listWrite = new List<byte[]>();
+        //List<byte[]> listWrite = new List<byte[]>();
+        List<Message> listWrite = new List<Message>();
         volatile bool _keepReading = false;
 
         byte[] readBuff = new byte[200];
@@ -613,9 +621,12 @@ namespace Common.Communication
             return this.Opened;
         }
 
-        public void sendMessage(byte[] bytes)
+        public void sendMessage(byte[] bytes,bool isClearReceiveBuffer)
         {
-            listWrite.Add(bytes);
+            Message message=new Message();
+            message.message = bytes;
+            message.isClearReceiveBuffer = isClearReceiveBuffer;
+            listWrite.Add(message);
             Console.Write("sendmessage to " + this.Port + "  \n");
             Thread.Sleep(100);
             //Console.Write("sendmessage :");
@@ -634,10 +645,12 @@ namespace Common.Communication
                     if (listWrite.Count > 0)
                     {
 
-                        int count = Write(listWrite[0], listWrite[0].Length);
-                        if (count > 0)
+                        int count = Write(listWrite[0].message, listWrite[0].message.Length);
+                        if (count > 0 && listWrite[0].isClearReceiveBuffer)
                         {
                             currRecData = new byte[0];
+                        }
+                        if (count > 0) {
                             listWrite.RemoveAt(0);
                         }
                         Thread.Sleep(50);
@@ -687,6 +700,7 @@ namespace Common.Communication
                                 Array.Copy(readBuff, temReadBuff, count);
                                 currRecData = currRecData.Concat(temReadBuff).ToArray();
                                 receiveData?.Invoke(currRecData);
+                                currRecData = new byte[0];
                             }
                         }
                     }

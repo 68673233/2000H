@@ -25,6 +25,7 @@ namespace WindowsServiceClient
             initClass();
             initCtrl();
             initParamToUI();
+            initVersion();
         }
 
         service.ServiceOpt server;
@@ -70,6 +71,16 @@ namespace WindowsServiceClient
             ipAddrText1.setIpAddress(ip);
             txt_port.Text = port;
 
+        }
+
+        private void initVersion() {
+           string  version = "程序集版本：" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\n";
+           //version += "文件版本：" + Application.ProductVersion.ToString() + "\n";
+           //version += "部署版本：" + System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+           string datetime = "编译时间： " + System.IO.File.GetLastWriteTime(this.GetType().Assembly.Location);
+            label7.Text = version;
+            label8.Text = datetime;
+            
         }
 
         private void OnLoggerParamToUI(int type,string content) {
@@ -306,5 +317,7 @@ namespace WindowsServiceClient
             notifyIcon1.Visible = true;
             Logger.Instance.i("formClosing","formClosing");
         }
+
+
     }
 }

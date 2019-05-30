@@ -51,7 +51,9 @@ namespace Common.Communication
             comm.OnPortCheckSuccess = onPortCheckSuccess;
             comm.setAutoCheckCom(true);
         }
-
+        public void closePort() {
+            comm?.closePort();
+        }
         public void checkUsbState() {
             registeredWaitHandle= ThreadPool.RegisterWaitForSingleObject(new AutoResetEvent(true), new WaitOrTimerCallback(checkUsbStateMethod), null, 3000, false);
         }

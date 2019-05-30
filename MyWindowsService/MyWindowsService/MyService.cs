@@ -71,7 +71,6 @@ namespace MyWindowsService
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState,  isConn).toBytes());
 
 
-            commHelper.sendMessage(new byte[] {0x55,0xAA,0xAA,0x55,0x01 });
             Logger.Instance.i(Tag, "服务启动");
 
         }
@@ -85,6 +84,7 @@ namespace MyWindowsService
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isConn).toBytes());
 
             commHelper?.unCheckUsbState();
+            commHelper?.closePort();
             commHelper = null;
             tcpHelper?.closeSocket();
             tcpHelper = null;
