@@ -11,6 +11,9 @@ namespace Common.Communication
         private TcpProtocol tcpProtocol;
 
         public OnUncompressData onUncompressData = null;
+        public Action<string> onSendError = null;
+        public Action<string> onReceiveError = null;
+        public Action onSendSuccess = null;
 
         private string _ip;
         private int _port;
@@ -32,12 +35,18 @@ namespace Common.Communication
             if (recieveSocket == null)
             {
                 recieveSocket = new TCPSocket(_ip, _port, onUncompressData, this.RecieveTimeOut);
+                recieveSocket.onReceiveError = this.onReceiveError;
+                recieveSocket.onSendError = this.onSendError;
+                recieveSocket.onSendSuccess = this.onSendSuccess;
                 recieveSocket.AddRecieveTimeout(this.RecieveTimeOut);
                 recieveSocket.startAcceptMsg();
             }
             else if (recieveSocket.IsConn == -1)
             {
                 recieveSocket = new TCPSocket(_ip, _port, onUncompressData, this.RecieveTimeOut);
+                recieveSocket.onReceiveError = this.onReceiveError;
+                recieveSocket.onSendError = this.onSendError;
+                recieveSocket.onSendSuccess = this.onSendSuccess;
                 recieveSocket.AddRecieveTimeout(this.RecieveTimeOut);
                 recieveSocket.startAcceptMsg();
             }
@@ -74,8 +83,9 @@ namespace Common.Communication
         }
 
         public void sendMessage(byte[] info) {
-            if (recieveSocket!=null && recieveSocket.IsConn!=-1)
+            if (recieveSocket != null && recieveSocket.IsConn != -1)
                 recieveSocket.sendInfo(info);
+            
         }
 
     }

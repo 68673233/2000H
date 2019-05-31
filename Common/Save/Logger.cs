@@ -155,9 +155,12 @@ namespace Common.Save
                                 int type = b[i+0] | b[i+1] << 8 | b[i+2] << 16 | b[i+3] << 24;
                                 int len = b[i+4] | b[i + 5] << 8 | b[i + 6] << 16 | b[i + 7] << 24;
                                 byte[] bytes = new byte[len];
-                                Array.Copy(b, i+8, bytes, 0, len);
-                                string str = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                                OnParamToUI?.Invoke(type, str);
+                                if (b.Length > 8 + len)
+                                {
+                                    Array.Copy(b, i + 8, bytes, 0, len);
+                                    string str = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                                    OnParamToUI?.Invoke(type, str);
+                                }
                                 i = i + 8+len;
                             }
                          }
@@ -165,6 +168,7 @@ namespace Common.Save
                         catch (Exception e)
                         {
                             Logger.Instance.i(TAG,"recieve error:"+e);
+                            
                             client = list.AcceptTcpClient();
                     }
                 }

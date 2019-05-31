@@ -16,7 +16,9 @@ namespace Common.Communication
         /// </summary>
         public OnUncompressData uncompressData = null;
         public System.Timers.ElapsedEventHandler recieveTimeOut = null;
-
+        public Action<string> onSendError = null;
+        public Action<string> onReceiveError = null;
+        public Action onSendSuccess = null;
 
         private TcpClient client;
         private Thread client_th;
@@ -205,6 +207,8 @@ namespace Common.Communication
                     // MessageBox.Show("与服务器断开连接了");
                     // MessageBox.Show(e.Message);
                     ns.Close();
+                    _isConn = -1;
+                    onReceiveError?.Invoke(e.ToString());
                     break;
 
                 }
@@ -237,10 +241,12 @@ namespace Common.Communication
                 NetworkStream sendStream = client.GetStream();
                 sendStream.Write(info, 0, info.Length);
                 sendStream.Flush();
+                onSendSuccess?.Invoke();
             }
             catch (Exception e)
             {
-
+                _isConn = -1;
+                onSendError?.Invoke(e.ToString());
             }
         }
 

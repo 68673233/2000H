@@ -12,7 +12,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 
 namespace MyWindowsService
 {
@@ -26,6 +26,13 @@ namespace MyWindowsService
         TcpHelper tcpHelper;
         string logDir;
         string iniFilePath;
+        string ip = "192.168.1.10";
+        int port = 10080;
+        byte[] commBytes = new byte[0];
+        /// <summary>
+        /// 当前服务的状态，使用到网络断开是否自动连接。
+        /// </summary>
+        bool serverState = false;
 
         public MyService()
         {
@@ -52,8 +59,7 @@ namespace MyWindowsService
             commHelper.checkUsbState();
             commHelper.OnRelayDate = relayData;
 
-            string ip = "192.168.1.10";
-            int port = 10080;
+            
             try
             {
                 ip = ini.read(IniFileOpt.IP);
@@ -66,9 +72,15 @@ namespace MyWindowsService
             }
             tcpHelper = new TcpHelper(ip,port);
             tcpHelper.onUncompressData = tcpReceiveData;
+            tcpHelper.onSendError =onSendError;
+            tcpHelper.onReceiveError =onReceiveError;
+            tcpHelper.onSendSuccess = onSendSuccess;
             tcpHelper.openSockect();
             string isConn = tcpHelper.IsConn().ToString();
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState,  isConn).toBytes());
+
+
+            serverState = true;
 
 
             Logger.Instance.i(Tag, "服务启动");
@@ -79,6 +91,7 @@ namespace MyWindowsService
 
         protected override void OnStop()
         {
+            serverState = false;
             string isConn = "False";
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn).toBytes());
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState, isConn).toBytes());
@@ -125,7 +138,7 @@ namespace MyWindowsService
                 string isCommConn = bCommConn.ToString();
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState,  isCommConn).toBytes());
                 }
-
+                //Logger.Instance.i(Tag,"检查服务状态！");
             }
             catch (Exception e) {
                 Logger.Instance.i(Tag,"尝试连接界面失败！");
@@ -139,6 +152,21 @@ namespace MyWindowsService
         private void relayData(byte[] bytes) {
             Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
             //string s = "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
+            if (bytes.Length > 16) {
+                string s = " 串口接收到的数据长度：" + bytes.Length;
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
+            }
+            else
+            {
+                string s = " 串口接收到的数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
+            }
+
+            commBytes = new byte[bytes.Length];
+            Array.Copy(bytes, commBytes, bytes.Length);
+            if (serverState && (tcpHelper == null || tcpHelper.IsConn() == false)) {
+                OnConnected(null);
+            }
             try
             {
                 tcpHelper?.sendMessage(bytes);
@@ -156,7 +184,8 @@ namespace MyWindowsService
                 Array.Copy(data, bytes, len);
                 Logger.Instance.i(Tag, "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
                 //string s = "网络接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
-                //Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
+                string s = " 网口接收到的数据长度：" + bytes.Length;
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
                 commHelper?.sendMessage(bytes);
             }
             catch (Exception e) {
@@ -164,7 +193,38 @@ namespace MyWindowsService
             }
             return 0;
         }
+        private void onSendError(string s) {
+            string isConn = "False";
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SocketState, isConn).toBytes());
+            Logger.Instance.i(Tag,"网络发送失败，与服务器连接已断开 e:"+s);
+        }
+        private void onReceiveError(string s) {
+            Logger.Instance.i(Tag, "网络接收出错：" + s);
+            Thread thread = new Thread(OnConnected);
+            thread.Start();
+        }
+        private void onSendSuccess() {
+            Logger.Instance.i(Tag, "网络发送成功！");
+        }
 
+        private void OnConnected(object state)
+        {
+            if (serverState)
+            {
+                tcpHelper?.closeSocket();
+                Thread.Sleep(200);
+                tcpHelper = new TcpHelper(ip, port);
+                tcpHelper.onUncompressData = tcpReceiveData;
+                tcpHelper.onSendError = onSendError;
+                tcpHelper.onReceiveError = onReceiveError;
+                tcpHelper.onSendSuccess = onSendSuccess;
+                tcpHelper.openSockect();
+                tcpHelper.sendMessage(commBytes);
+                Logger.Instance.i(Tag, "重新发送数据：" + Common.Utils.CommonUtils.ToHexString(commBytes));
+                string ss = "重新发送数据长度：" + commBytes.Length;
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, ss).toBytes());
+            }
+        }
 
     }
 }
