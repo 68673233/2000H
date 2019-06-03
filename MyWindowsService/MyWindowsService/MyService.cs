@@ -33,6 +33,10 @@ namespace MyWindowsService
         /// 当前服务的状态，使用到网络断开是否自动连接。
         /// </summary>
         bool serverState = false;
+        /// <summary>
+        /// 与界面通信是否正常
+        /// </summary>
+        bool uiCommState = false;
 
         public MyService()
         {
@@ -138,10 +142,14 @@ namespace MyWindowsService
                 string isCommConn = bCommConn.ToString();
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_SerialState,  isCommConn).toBytes());
                 }
-                //Logger.Instance.i(Tag,"检查服务状态！");
+               if (uiCommState==false)
+                  Logger.Instance.i(Tag,"尝试连接界面正常！");
+                uiCommState = true;
             }
             catch (Exception e) {
+                if (uiCommState)
                 Logger.Instance.i(Tag,"尝试连接界面失败！");
+                uiCommState = false;
             }
         }
 
@@ -204,7 +212,10 @@ namespace MyWindowsService
             thread.Start();
         }
         private void onSendSuccess() {
-            Logger.Instance.i(Tag, "网络发送成功！");
+
+            string ss = "网络发送成功！";
+            Logger.Instance.i(Tag, ss);
+            Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, ss).toBytes());
         }
 
         private void OnConnected(object state)
