@@ -14,6 +14,9 @@ namespace Common.Save
     {
         private const string TAG = "Logger";
 
+        private const string LogFileName = "LogFileName";
+        private const int FileSize = 1024 * 10000; //10M
+
         #region  网络通信相关
         ///网络传送协议  
         ///<int>type</int>
@@ -22,7 +25,7 @@ namespace Common.Save
 
 
 
-       
+
 
         /// <summary>
         /// 服务端将数据更新到界面
@@ -47,13 +50,24 @@ namespace Common.Save
         public string FilePath = null;
 
         private string fileName;
+        private string iniFilePath;
+        private IniFileOpt ini;
 
         public Action<string> OnLoggerI = null;
+        
 
 
-        public void init(string filePath, Action<string> _onLoggerI) {
+        public void init(string filePath,string iniFilePath, Action<string> _onLoggerI) {
             this.FilePath = filePath;
+            this.iniFilePath = iniFilePath;
             OnLoggerI = _onLoggerI;
+
+            ini = new IniFileOpt(this.iniFilePath);
+            fileName= ini.read(LogFileName);
+            if (fileName == "") {
+                fileName=DateTime.Now.ToString("yyyy_MM_dd HH_mm_ss");
+                ini.write(LogFileName, fileName);
+            }
         }
 
         /// <summary>
@@ -64,8 +78,28 @@ namespace Common.Save
         public void i(string tag, string val) {
             string content = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "   " + tag + ":" + val;
             if (FilePath != null) {
-                fileName = DateTime.Now.ToString("yyyy-MM-dd");
                 string path = FilePath + "\\" + fileName;
+
+                if (File.Exists(path)) {
+                    FileInfo fileInfo = new FileInfo(path);
+                    if (fileInfo.Length > FileSize  ) {
+                        if (ini.read(LogFileName) == this.fileName)
+                        {
+                            fileName = DateTime.Now.ToString("yyyy_MM_dd HH_mm_ss");
+                            ini.write(LogFileName, fileName);
+                            path = FilePath + "\\" + fileName;
+                        }
+                        else {
+                            fileName = ini.read(LogFileName);
+                            path = FilePath + "\\" + fileName;
+                        }
+
+                    }
+                }
+                
+
+                
+
                 try
                 {
                     File.AppendAllText(path, content + Environment.NewLine);

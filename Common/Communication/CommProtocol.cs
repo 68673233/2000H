@@ -58,7 +58,7 @@ namespace Common.Communication
             heartbeatTimer.AutoReset = true;
             heartbeatTimer.Elapsed += new ElapsedEventHandler(heartbeatElapsedEvent);
             //heartbeatTimer.Elapsed += new ElapsedEventHandler((s, e) => heartbeatElapsedEvent(s, e,ref NoHeartBeatCount));
-            heartbeatTimer.Interval = 1000;
+            heartbeatTimer.Interval = 800;
             heartbeatTimer.Enabled = false;
 
         }
@@ -74,7 +74,7 @@ namespace Common.Communication
                 NoHeartBeatCount = 0;
                 CurrConnState = false;
                 OnPortCheckError?.Invoke();
-                Logger.Instance.i("comm","连接设备心跳断开!");
+                //Logger.Instance.i("comm","连接设备心跳断开!");
                 return;
             }
             if (CurrConnState)
@@ -145,7 +145,7 @@ namespace Common.Communication
 
                 comm.receiveData += receivedData;
                 bool b;
-                if (b = comm.open()) { this.connDev(); Logger.Instance.i("comm","探测串口！连接"); }
+                if (b = comm.open()) { this.connDev();/* Logger.Instance.i("comm","探测串口！连接");*/ }
 
 
                 System.Threading.Thread.Sleep(300);

@@ -34,7 +34,7 @@ namespace WindowsServiceClient
         private void initClass()
         {
             if (!Directory.Exists(PathManage.LogDir)) Directory.CreateDirectory(PathManage.LogDir);
-            Logger.Instance.init(PathManage.LogDir, OnLoggerI);
+            Logger.Instance.init(PathManage.LogDir, PathManage.IniFilePath, OnLoggerI);
             Logger.Instance.startSocketService(OnLoggerParamToUI);
         }
         private void initCtrl() {
@@ -245,6 +245,7 @@ namespace WindowsServiceClient
             if (server.getServiceState(PathManage.ServiceName) == (int)ServiceControllerStatus.Running) {
                 server.ServiceStop(PathManage.ServiceName);
             }
+            System.Threading.Thread.Sleep(500);
             RebootService();
 
             //TcpHelper tcp = new TcpHelper(ipAddrText1.ipAddressString(), int.Parse(txt_port.Text));

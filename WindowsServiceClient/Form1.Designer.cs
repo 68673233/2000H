@@ -47,8 +47,6 @@
             this.txt_port = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.imageDevice = new System.Windows.Forms.PictureBox();
@@ -57,18 +55,20 @@
             this.menuitem_clear = new System.Windows.Forms.ToolStripMenuItem();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.ipAddrText1 = new WindowsServiceClient.controls.IpAddrText();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageServer)).BeginInit();
             this.listbox1_menu.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(67, 73);
+            this.button1.Location = new System.Drawing.Point(27, 81);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -77,7 +77,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(167, 73);
+            this.button2.Location = new System.Drawing.Point(127, 81);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -86,7 +86,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(262, 73);
+            this.button3.Location = new System.Drawing.Point(222, 81);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 0;
@@ -95,7 +95,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(363, 73);
+            this.button4.Location = new System.Drawing.Point(323, 81);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 0;
@@ -105,7 +105,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(45, 22);
+            this.label1.Location = new System.Drawing.Point(5, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 12);
             this.label1.TabIndex = 1;
@@ -114,7 +114,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(140, 22);
+            this.label2.Location = new System.Drawing.Point(100, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 2;
@@ -165,7 +165,7 @@
             this.groupBox1.Controls.Add(this.ipAddrText1);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(39, 132);
+            this.groupBox1.Location = new System.Drawing.Point(-1, 140);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(450, 116);
             this.groupBox1.TabIndex = 4;
@@ -209,29 +209,10 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Ip";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.listBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 270);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(531, 206);
-            this.panel1.TabIndex = 5;
-            // 
-            // listBox1
-            // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(531, 206);
-            this.listBox1.TabIndex = 0;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(385, 22);
+            this.label5.Location = new System.Drawing.Point(345, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 6;
@@ -240,7 +221,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(372, 52);
+            this.label6.Location = new System.Drawing.Point(332, 60);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 12);
             this.label6.TabIndex = 6;
@@ -249,7 +230,7 @@
             // imageDevice
             // 
             this.imageDevice.Image = global::WindowsServiceClient.Properties.Resources.noconn;
-            this.imageDevice.Location = new System.Drawing.Point(460, 14);
+            this.imageDevice.Location = new System.Drawing.Point(420, 22);
             this.imageDevice.Name = "imageDevice";
             this.imageDevice.Size = new System.Drawing.Size(25, 25);
             this.imageDevice.TabIndex = 7;
@@ -258,7 +239,7 @@
             // imageServer
             // 
             this.imageServer.Image = global::WindowsServiceClient.Properties.Resources.noconn;
-            this.imageServer.Location = new System.Drawing.Point(460, 43);
+            this.imageServer.Location = new System.Drawing.Point(420, 51);
             this.imageServer.Name = "imageServer";
             this.imageServer.Size = new System.Drawing.Size(25, 25);
             this.imageServer.TabIndex = 7;
@@ -280,7 +261,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(45, 251);
+            this.label7.Location = new System.Drawing.Point(5, 259);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 0;
@@ -289,11 +270,42 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(311, 251);
+            this.label8.Location = new System.Drawing.Point(271, 259);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 1;
             this.label8.Text = "label8";
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Controls.Add(this.button3);
+            this.panel2.Controls.Add(this.label7);
+            this.panel2.Controls.Add(this.button4);
+            this.panel2.Controls.Add(this.imageServer);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.imageDevice);
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.groupBox1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(467, 284);
+            this.panel2.TabIndex = 8;
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(0, 284);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(467, 273);
+            this.listBox1.TabIndex = 9;
             // 
             // ipAddrText1
             // 
@@ -309,21 +321,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(531, 476);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.imageServer);
-            this.Controls.Add(this.imageDevice);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(467, 557);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.panel2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -333,12 +333,12 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageDevice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageServer)).EndInit();
             this.listbox1_menu.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -360,8 +360,6 @@
         private System.Windows.Forms.TextBox txt_port;
         private controls.IpAddrText ipAddrText1;
         private System.Windows.Forms.Button btn_SetAndRun;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem menuitem_exit;
         private System.Windows.Forms.Label label5;
@@ -372,6 +370,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuitem_clear;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

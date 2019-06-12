@@ -52,7 +52,7 @@ namespace MyWindowsService
                 {
                     logDir = prc.MainModule.FileName.Replace(ProcessExeName, "Log");
                     iniFilePath = prc.MainModule.FileName.Replace(ProcessExeName, "config.ini");
-                    Logger.Instance.init(logDir, null);
+                    Logger.Instance.init(logDir,iniFilePath, null);
                 }
                 
             }
@@ -158,22 +158,31 @@ namespace MyWindowsService
         /// </summary>
         /// <param name="bytes"></param>
         private void relayData(byte[] bytes) {
+            bool bCommConn = commHelper != null ? commHelper.IsConn : false;
+            if (bCommConn == false) { return; }
+
             Logger.Instance.i(Tag, "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes));
             //string s = "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
             if (bytes.Length > 16) {
                 string s = " 串口接收到的数据长度：" + bytes.Length;
+                if (bytes.SequenceEqual(commBytes)) s = "下位机发起重发机制,数据长度：" + bytes.Length;
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
             }
             else
             {
                 string s = " 串口接收到的数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
+                if (bytes.SequenceEqual(commBytes)) s = "下位机发起重发机制,数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
             }
+            
 
             commBytes = new byte[bytes.Length];
             Array.Copy(bytes, commBytes, bytes.Length);
             if (serverState && (tcpHelper == null || tcpHelper.IsConn() == false)) {
                 OnConnected(null);
+                string s = "接收到串口数据后，发现网络连接不正确，重新连接！";
+                Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
+                Logger.Instance.i(Tag,s);
             }
             try
             {
@@ -214,7 +223,7 @@ namespace MyWindowsService
         private void onSendSuccess() {
 
             string ss = "网络发送成功！";
-            Logger.Instance.i(Tag, ss);
+            //Logger.Instance.i(Tag, ss);
             Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, ss).toBytes());
         }
 
@@ -223,7 +232,12 @@ namespace MyWindowsService
             if (serverState)
             {
                 tcpHelper?.closeSocket();
-                Thread.Sleep(200);
+                tcpHelper.onUncompressData = null;
+                tcpHelper.onSendError = null;
+                tcpHelper.onReceiveError = null;
+                tcpHelper.onSendSuccess = null;
+
+                Thread.Sleep(500);
                 tcpHelper = new TcpHelper(ip, port);
                 tcpHelper.onUncompressData = tcpReceiveData;
                 tcpHelper.onSendError = onSendError;
@@ -231,8 +245,8 @@ namespace MyWindowsService
                 tcpHelper.onSendSuccess = onSendSuccess;
                 tcpHelper.openSockect();
                 tcpHelper.sendMessage(commBytes);
-                Logger.Instance.i(Tag, "重新发送数据：" + Common.Utils.CommonUtils.ToHexString(commBytes));
-                string ss = "重新发送数据长度：" + commBytes.Length;
+                Logger.Instance.i(Tag, "上位机重新发送数据：" + Common.Utils.CommonUtils.ToHexString(commBytes));
+                string ss = "上位机重新发送数据长度：" + commBytes.Length;
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, ss).toBytes());
             }
         }
