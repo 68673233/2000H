@@ -118,6 +118,7 @@ namespace Common.Communication
             }
             catch (Exception ex)
             {
+                _isConn = -1;
                 // 标记失败
                 exception = ex;
             }

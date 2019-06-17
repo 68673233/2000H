@@ -165,13 +165,15 @@ namespace MyWindowsService
             //string s = "串口接收到的数据：" + Common.Utils.CommonUtils.ToHexString(bytes);
             if (bytes.Length > 16) {
                 string s = " 串口接收到的数据长度：" + bytes.Length;
-                if (bytes.SequenceEqual(commBytes)) s = "下位机发起重发机制,数据长度：" + bytes.Length;
+                if (bytes.SequenceEqual(commBytes))
+                    s = "下位机发起重发机制,数据长度：" + bytes.Length;
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
             }
             else
             {
                 string s = " 串口接收到的数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
-                if (bytes.SequenceEqual(commBytes)) s = "下位机发起重发机制,数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
+                if (bytes.SequenceEqual(commBytes))
+                    s = "下位机发起重发机制,数据长度：" + bytes.Length + "  bytes:" + Common.Utils.CommonUtils.ToHexString(bytes);
                 Logger.Instance.sendMessageToService(new LoggerInfoBean(LoggerInfoBean.TYPE_Record, s).toBytes());
             }
             
@@ -237,7 +239,7 @@ namespace MyWindowsService
                 tcpHelper.onReceiveError = null;
                 tcpHelper.onSendSuccess = null;
 
-                Thread.Sleep(500);
+                Thread.Sleep(600);
                 tcpHelper = new TcpHelper(ip, port);
                 tcpHelper.onUncompressData = tcpReceiveData;
                 tcpHelper.onSendError = onSendError;
